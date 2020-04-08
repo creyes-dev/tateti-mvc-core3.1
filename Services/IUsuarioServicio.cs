@@ -7,5 +7,7 @@ namespace tateti.Services
     {
         Task<bool> EstaEnLinea(string nombre);
         Task<bool> RegistrarUsuario(UsuarioModel usuario);
+        Task<UsuarioModel> ObtenerUsuarioPorEmail(string email);
+        Task ActualizarUsuario(UsuarioModel usuario);
     }
 }

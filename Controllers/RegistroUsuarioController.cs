@@ -38,9 +38,17 @@ namespace tateti.Controllers
             }            
         }
 
-        public IActionResult ConfirmacionCorreo(string email)
+        [HttpGet]
+        public async Task<IActionResult> ConfirmacionCorreo(string email)
         {
+            var usuario = await _servicio.ObtenerUsuarioPorEmail(email);
+            if (usuario?.MailEstaConfirmado == true)
+                return RedirectToAction("Index", "InvitacionJuego", new { email = email });
+
             ViewBag.Email = email;
+            usuario.MailEstaConfirmado = true;
+            usuario.FechaConfirmacionEmail = DateTime.Now;
+            await _servicio.ActualizarUsuario(usuario);
             return View();
         }
 
