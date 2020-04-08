@@ -1,11 +1,12 @@
 # tateti-mvc-core3
- Juego del ta te ti con asp.net core 3.1
+
+Juego del ta te ti con asp.net core 3.1
 
 Dentro de una cuadrícula de 3 filas y 3 columnas cada jugador escoge la celda en donde va una X o un O. El ganador es el jugador que consiga mantener tres X en celdas sucesivas en orientación vertical, horizontal o en diagonal
 
 ## Requerimientos
 
-1. Todo jugador debe estar registrado. La cuenta del jugador contiene su nombre y apellido y su puntaje. 
+1. Todo jugador debe estar registrado con su email, cuando el jugador se registra su email debe ser confirmado antes de poder jugar. La cuenta del jugador contiene su nombre y apellido y su puntaje. 
 2. Un jugador gana un punto cuando gana una partida.
 3. Para que dos jugadores puedan jugar uno debe enviar una invitación a otro, cuando esto sucede el jugador que invita al otro jugador debe esperar a que éste último acepte su invitación. 
 4. Implementar un tablero de posiciones para determinar el ranking de jugadores con mayor puntaje. 

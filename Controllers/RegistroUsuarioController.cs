@@ -30,10 +30,18 @@ namespace tateti.Controllers
                 // El método es asíncrono pero acá se solicita que se espere hasta
                 // que el método se ejecute para poder continuar
                 await _servicio.RegistrarUsuario(usuario);
-
-                return Content($"El usuario {usuario.Nombre} {usuario.Apellido} ha sido registrado satisfactoriamente");
+                return RedirectToAction(nameof(ConfirmacionCorreo), new { usuario.Email });
             }
-            return View(usuario);
+            else
+            {
+                return View(usuario);
+            }            
+        }
+
+        public IActionResult ConfirmacionCorreo(string email)
+        {
+            ViewBag.Email = email;
+            return View();
         }
 
     }
