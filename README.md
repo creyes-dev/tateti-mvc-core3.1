@@ -15,7 +15,8 @@ Dentro de una cuadrícula de 3 filas y 3 columnas cada jugador escoge la celda e
 ## Dependencias
 
 - Asp.Net Mvc Core 3.1
-- bootstrap 4.3.1
-- jquery 3.3.1
+- BundlerMinifier.Core 3.2.447
+- Bootstrap 4.3.1
+- JQuery 3.3.1
 - popper.js 1.14.7
 
