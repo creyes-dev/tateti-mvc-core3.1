@@ -9,3 +9,13 @@ Un email ha sido enviado a @ViewBag.Email, por favor
 confirme su dirección de correo eletrónico haciendo click
 en el link enviado.
 
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            // Se llama a la función ConfirmacionEmail definida en /app/js/scripts1.js
+            // verificará continuamente si el usuario ha confirmado su mail
+            ConfirmacionEmail('@ViewBag.Email');
+        });
+    </script>
+}
