@@ -7,7 +7,7 @@
             if (intervalo !== null)
                 clearInterval(intervalo);
             // Finalmente redireccionar a la pantalla de envío de invitaciones
-            window.location.href = "/GameInvitation?email=" + email;
+            window.location.href = "/InvitacionJuego?email=" + email;
         }
     });
 }

@@ -42,9 +42,6 @@ namespace tateti.Controllers
         public async Task<IActionResult> ConfirmacionCorreo(string email)
         {
             var usuario = await _servicio.ObtenerUsuarioPorEmail(email);
-            if (usuario?.MailEstaConfirmado == true)
-                return RedirectToAction("Index", "InvitacionJuego", new { email = email });
-
             ViewBag.Email = email;
             return View();
         }

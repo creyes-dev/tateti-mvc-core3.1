@@ -37,15 +37,16 @@ namespace tateti.Middleware
         private async Task ProcesarConfirmacionEmail(HttpContext contexto)
         {
             var email = contexto.Request.Query["Email"];
-            var usuario = await _usuarioService.ObtenerUsuarioPorEmail(email);
-
+            
             if(string.IsNullOrEmpty(email))
             {
                 await contexto.Response.WriteAsync("BadRequest: Email es requerido");
             } 
             else
             {
-                if(usuario.MailEstaConfirmado) 
+                var usuario = await _usuarioService.ObtenerUsuarioPorEmail(email);
+
+                if (usuario.MailEstaConfirmado) 
                 { 
                     await contexto.Response.WriteAsync("OK"); 
                 }
