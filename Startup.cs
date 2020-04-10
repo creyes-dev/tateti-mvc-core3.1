@@ -37,6 +37,7 @@ namespace tateti
             // (*DirBro) app.UseDirectoryBrowser();  // Hemos agregado el Middleware de asp que permite a los usuarios ver carpetas y archivos
             
             // app.UsarMiddlewareComunicacion(); // ???
+
             app.UseStaticFiles();   // Middleware de asp que permite que los archivos estáticos sean públicos y cualquiera pueda accederlos
             app.UseRouting();
             
@@ -73,7 +74,10 @@ namespace tateti
             app.UseRouter(nuevaRuta);
             */
 
+            app.UseWebSockets();
+
             app.UsarMiddlewareComunicacion(); // ?
+
             app.UseStatusCodePages("text/plain", "HTTP Error - Status Code: {0}"); // Manejar los errores muy basicamente
             app.UseStatusCodePagesWithRedirects("/error/{0}"); // Como enviar un mensaje de error que indica que el recurso ha sido movido temporalmente
             app.UseStatusCodePagesWithReExecute("/error/{0}"); // Como devolver un codigo http original al cliente y redirigirlo a una página de usuario específica
