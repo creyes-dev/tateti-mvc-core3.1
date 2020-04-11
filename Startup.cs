@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using tateti.Services;
@@ -24,6 +26,10 @@ namespace tateti
             services.AddControllersWithViews();
             services.AddSingleton<IUsuarioServicio, UsuarioServicio>();
             services.AddRouting();  // Servicio que se usa para trabajar con enrutamientos
+            services.AddSession(obj => { // uso de variables de sesión
+                obj.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+            services.AddLocalization(opciones => opciones.ResourcesPath = "Localizacion");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +45,8 @@ namespace tateti
             // app.UsarMiddlewareComunicacion(); // ???
 
             app.UseStaticFiles();   // Middleware de asp que permite que los archivos estáticos sean públicos y cualquiera pueda accederlos
+            app.UseSession();       // Activar el middleware de manejo de variables de sesión 
+            
             app.UseRouting();
             
             app.UseEndpoints(endpoints =>
@@ -77,6 +85,21 @@ namespace tateti
             app.UseWebSockets();
 
             app.UsarMiddlewareComunicacion(); // ?
+
+            // Cultura
+            var culturasSoportadas = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            var opcionesLocalizacion = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("es-AR"), // en-US
+                SupportedCultures = culturasSoportadas,
+                SupportedUICultures = culturasSoportadas
+            };
+
+            opcionesLocalizacion.RequestCultureProviders.Clear();
+            opcionesLocalizacion.RequestCultureProviders.Add(new ProveedorCulturaServicio());
+            app.UseRequestLocalization(opcionesLocalizacion);
+
+            // Manejo de errores
 
             app.UseStatusCodePages("text/plain", "HTTP Error - Status Code: {0}"); // Manejar los errores muy basicamente
             app.UseStatusCodePagesWithRedirects("/error/{0}"); // Como enviar un mensaje de error que indica que el recurso ha sido movido temporalmente
