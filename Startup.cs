@@ -11,14 +11,25 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Razor;
 using tateti.Services;
 using tateti.Extensiones;
+using tateti.Opciones;
 
 namespace tateti
 {
     public class Startup
     {
+        public IConfiguration _configuracion { get; }
+
+        public Startup(IConfiguration configuracion)
+        {
+            // Agregar configuraciones
+            _configuracion = configuracion;
+        }
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -42,7 +53,11 @@ namespace tateti
             // las traducciones del texto presentes en las validaciones de los model
             services.AddMvc().AddViewLocalization(
                 LanguageViewLocationExpanderFormat.Suffix, options =>
-                    options.ResourcesPath = "Localizacion").AddDataAnnotationsLocalization();        
+                    options.ResourcesPath = "Localizacion").AddDataAnnotationsLocalization();
+
+            // Configurar el servicio de correo según la configuración recibida
+            services.Configure<EmailOpciones>(_configuracion.GetSection("Email"));
+            services.AddSingleton<IEmailServicio, EmailServicio>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
