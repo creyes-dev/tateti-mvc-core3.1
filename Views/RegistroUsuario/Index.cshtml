@@ -1,11 +1,12 @@
 ﻿@model tateti.Models.UsuarioModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = Localizador["Titulo"];
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>UserModel</h4>
+<h2>@ViewData["Titulo"]</h2>
+<h4>@ViewData["Subtitulo"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">

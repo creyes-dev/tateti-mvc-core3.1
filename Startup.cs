@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor;
 using tateti.Services;
 using tateti.Extensiones;
 
@@ -30,6 +31,18 @@ namespace tateti
                 obj.IdleTimeout = TimeSpan.FromMinutes(30);
             });
             services.AddLocalization(opciones => opciones.ResourcesPath = "Localizacion");
+
+            // Suscribir las vistas a los recursos que contienen las traducciones
+            // del texto presente en las vistas
+            services.AddMvc().AddViewLocalization(
+                Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix,
+                options => options.ResourcesPath = "Localizacion").AddDataAnnotationsLocalization();
+
+            // Suscribir los Data Annotations de los model a los recursos que contienen
+            // las traducciones del texto presentes en las validaciones de los model
+            services.AddMvc().AddViewLocalization(
+                LanguageViewLocationExpanderFormat.Suffix, options =>
+                    options.ResourcesPath = "Localizacion").AddDataAnnotationsLocalization();        
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

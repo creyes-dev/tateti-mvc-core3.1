@@ -9,13 +9,13 @@ namespace tateti.Models
     public class UsuarioModel
     {
         public Guid Id { get; set; }
-        [Required()]
+        [Required(ErrorMessage = "NombreRequired")]
         public string Nombre { get; set; }
-        [Required()]
+        [Required(ErrorMessage = "ApellidoRequired")]
         public string Apellido { get; set; }
-        [Required(), DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "EmailRequired"), DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        [Required(), DataType(DataType.Password)]
+        [Required(ErrorMessage = "PasswordRequired"), DataType(DataType.Password)]
         public string Password { get; set; }
         public bool MailEstaConfirmado { get; set; }
         public System.DateTime? FechaConfirmacionEmail { get; set; }
