@@ -1,5 +1,0 @@
-C:\Users\Cristian\source\repos\tateti\tateti.Logging\bin\Debug\netstandard2.0\tateti.Logging.deps.json
-C:\Users\Cristian\source\repos\tateti\tateti.Logging\bin\Debug\netstandard2.0\tateti.Logging.dll
-C:\Users\Cristian\source\repos\tateti\tateti.Logging\obj\Debug\netstandard2.0\tateti.Logging.csprojAssemblyReference.cache
-C:\Users\Cristian\source\repos\tateti\tateti.Logging\obj\Debug\netstandard2.0\tateti.Logging.AssemblyInfoInputs.cache
-C:\Users\Cristian\source\repos\tateti\tateti.Logging\obj\Debug\netstandard2.0\tateti.Logging.AssemblyInfo.cs
