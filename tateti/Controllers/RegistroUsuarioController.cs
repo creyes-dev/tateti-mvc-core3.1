@@ -6,18 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using tateti.Services;
 using tateti.Models;
+using Microsoft.Extensions.Logging;
 
 namespace tateti.Controllers
 {
     public class RegistroUsuarioController : Controller
     {
         readonly IUsuarioServicio _servicio;
-        readonly IEmailServicio _emailServicio; 
+        readonly IEmailServicio _emailServicio;
+        readonly ILogger<RegistroUsuarioController> _logger;
 
-        public RegistroUsuarioController(IUsuarioServicio servicio, IEmailServicio emailServicio)
+        public RegistroUsuarioController(IUsuarioServicio servicio, IEmailServicio emailServicio,
+            ILogger<RegistroUsuarioController> logger)
         {
             _servicio = servicio;
             _emailServicio = emailServicio;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -53,6 +57,8 @@ namespace tateti.Controllers
             else
             {
                 // El mail no ha sido confirmado
+                _logger.LogInformation($"##Start##  Proceso de confirmación de correo para {email} ");
+
                 var urlAccion = new UrlActionContext
                 {
                     Action = "ConfirmacionCorreo",

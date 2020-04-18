@@ -16,7 +16,15 @@ namespace tateti.Extensiones
             var loggingOpciones = new LoggingOpciones();
             configuracion.GetSection("Logging").Bind(loggingOpciones);
 
-            foreach(var provider in loggingOpciones.Proveedores)
+            // TODO: Confusión. Agregar aquí un proveedor, porque no se en donde se agrega!
+            ProveedorLoggingOpciones opciones = new ProveedorLoggingOpciones();
+            opciones.Nombre = "file";
+            opciones.LogLevel = 1;
+
+            ProveedorLoggingOpciones[] proveedorOpciones = new ProveedorLoggingOpciones[] { opciones };
+            loggingOpciones.Proveedores = proveedorOpciones;
+
+            foreach (var provider in loggingOpciones.Proveedores)
             {
                 switch(provider.Nombre.ToLower())
                 {
