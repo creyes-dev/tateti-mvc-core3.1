@@ -1,0 +1,18 @@
+﻿@model tateti.Models.InvitacionJuegoModel
+@{
+    ViewData["Title"] = "ConfirmacionInvitacionJuego";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@Localizador["Has invitado a {0} para jugar " +
+    "una partida de Ta te ti contigo, por favor espera " +
+    "hasta que el usuario esté conectado", Model.EmailDestino]</h1>
+
+@section Scripts{ 
+    <script>
+        $(document.ready(function () {
+            ConfirmacionInvitacionJuego('@Model.Id');
+        }
+    </script>
+}
+

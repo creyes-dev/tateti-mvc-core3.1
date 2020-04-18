@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.WebSockets;
 using tateti.Services;
 using tateti.Models;
@@ -43,23 +44,22 @@ namespace tateti.Middleware
                             await ProcesarConfirmacionEmail(contexto, webSocket, tokenCancelacion, comando.Parameters.ToString());
                             break;
                         }
+                    case "ChequearEstadoInvitacionJuego":
+                        {
+                            await ProcesarConfirmacionInvitacionJuego(contexto, webSocket, tokenCancelacion, comando.Parameters.ToString());
+                            break;
+                        }
                 }
+            }
+            else if (contexto.Request.Path.Equals("/ChequearEstadoConfirmacionEmail")) {
+                await ProcesarConfirmacionEmail(contexto);
+            }
+            else if (contexto.Request.Path.Equals("/ChequearConfirmacionEstadoInvitacionJuego")) { 
+                await ProcesarConfirmacionInvitacionJuego(contexto);
             }
             else
             {
-                // Es una solicitud por un request http
-                if (contexto.Request.Path.Equals("/ChequearEstadoConfirmacionEmail"))
-                {
-                    // Procesar la confirmación del mail sin usar websocket
-                    // Si la dirección del request se dirige a 
-                    // ChequearEstadoConfirmacionEmail entonces llamar al método
-                    // responsable de recibir la solicitud
-                    await ProcesarConfirmacionEmail(contexto);
-                }
-                else
-                {
-                    await _siguiente?.Invoke(contexto);
-                }
+                await _siguiente?.Invoke(contexto);
             }
         }
 
@@ -112,7 +112,47 @@ namespace tateti.Middleware
                 }
 
                 Task.Delay(500).Wait();
-                usuario = await _usuarioService.ObtenerUsuarioPorEmail(email);
+                // usuario = await _usuarioService.ObtenerUsuarioPorEmail(email);
+            }
+        }
+
+        private async Task ProcesarConfirmacionInvitacionJuego(HttpContext contexto)
+        {
+            var id = contexto.Request.Query["id"];
+            if (string.IsNullOrEmpty(id)) await contexto.Response.WriteAsync("BadRequest: Id es requerido");
+
+            var servicioInvitacionJuego = contexto.RequestServices.GetService<IInvitacionJuegoServicio>();
+            var invitacion = await servicioInvitacionJuego.ObtenerInvitacion(Guid.Parse(id));
+
+            if (invitacion.EstaConfirmado) await contexto.Response.WriteAsync(
+                 JsonConvert.SerializeObject(new
+                 {
+                     Resultado = "OK",
+                     Email = invitacion.InvitadoPor,
+                     invitacion.EmailDestino
+                 }));
+            else
+            {
+                await contexto.Response.WriteAsync("EsperarConfirmacion");
+            }
+        }
+
+        private async Task ProcesarConfirmacionInvitacionJuego(HttpContext contexto, WebSocket webSocket, CancellationToken ct, string paramenters)
+        {
+            var servicioInvitacionJuego = contexto.RequestServices.GetService<IInvitacionJuegoServicio>();
+            var id = Guid.Parse(paramenters);
+            var invitacion = await servicioInvitacionJuego.ObtenerInvitacion(id);
+
+            while (!ct.IsCancellationRequested && webSocket.CloseStatus.HasValue && invitacion?.EstaConfirmado == false)
+            {
+                await EnviarStringAsync(webSocket, JsonConvert.SerializeObject(
+                    new {
+                    Resultado = "OK",
+                    Email = invitacion.EmailDestino,
+                    invitacion.Id }), ct);
+
+                Task.Delay(500).Wait();
+                invitacion = await servicioInvitacionJuego.ObtenerInvitacion(id);
             }
         }
 

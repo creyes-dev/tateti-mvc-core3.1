@@ -58,6 +58,10 @@ namespace tateti
             // Configurar el servicio de correo según la configuración recibida
             services.Configure<EmailOpciones>(_configuracion.GetSection("Email"));
             services.AddSingleton<IEmailServicio, EmailServicio>();
+
+            // Agregar el servicio que maneja las invitaciones para jugar como un singleton: 
+            // tener siempre una sola instancia
+            services.AddSingleton<IInvitacionJuegoServicio, InvitacionJuegoServicio>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
