@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewData["Title"] - Ta te ti</title>
+    <title>@ViewData["Titulo"] - Ta te ti</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     </environment>
@@ -32,6 +32,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Políticas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Ranking" asp-action="Index">Ranking</a>
                         </li>
                     </ul>
                 </div>
@@ -61,7 +64,7 @@
     <div class="container body-content">
         <main role="main" class="pb-3">
             @RenderSection("Desktop", required: false)
-            @{IgnoreSection("Mobile");}
+            @if (IsSectionDefined("Mobile")) { IgnoreSection("Mobile"); }
             @RenderBody()
         </main>
         <footer class="border-top footer text-muted">

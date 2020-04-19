@@ -1,0 +1,37 @@
+﻿@using tateti.Models;
+@model IEnumerable<UsuarioModel>
+@{ViewData["Titulo"] = "Index";}.
+
+    <div class="row">
+        <div class="col-lg-12">
+            @section Desktop {<h2>
+                    @Localizador["TituloDesktop"] (
+                    Last updated @(System.DateTime.Now))
+                </h2>}
+            @section Mobile {<h2>
+                    @Localizador["TituloMobile"] (
+                    Last updated @(System.DateTime.Now))
+                </h2>}
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var usuario in Model)
+                    {
+                        <tr>
+                            <td>@usuario.Nombre @usuario.Apellido</td>
+                            <td>@usuario.Email</td>
+                            <td>@usuario.Puntaje.ToString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
