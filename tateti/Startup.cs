@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using tateti.Services;
 using tateti.Extensiones;
 using tateti.Opciones;
+using tateti.Filtros;
 
 namespace tateti
 {
@@ -29,13 +30,12 @@ namespace tateti
             _configuracion = configuracion;
         }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             // (*DirBro) services.AddDirectoryBrowser();     // Servicio de asp que permite a los usuarios ver carpetas y archivos
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(o => o.Filters.Add(typeof(DetectorMovilFiltro)));
             services.AddSingleton<IUsuarioServicio, UsuarioServicio>();
             services.AddRouting();  // Servicio que se usa para trabajar con enrutamientos
             services.AddSession(obj => { // uso de variables de sesión
@@ -62,6 +62,7 @@ namespace tateti
             // Agregar el servicio que maneja las invitaciones para jugar como un singleton: 
             // tener siempre una sola instancia
             services.AddSingleton<IInvitacionJuegoServicio, InvitacionJuegoServicio>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

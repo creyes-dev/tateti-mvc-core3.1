@@ -5,17 +5,18 @@
 }
 <div class="row">
     <div class="col-lg-12">
-        <h2>Ta te ti</h2>
+        @section Desktop {<h2>@Localizador["TituloDesktop"]</h2>}
+        @section Mobile {<h2>@Localizador["TituloMobile"]</h2>}
         <div class="alert alert-info">
             <p>Ta-te-ti es un juego por turno para dos jugadores.</p>
             <p>
-                Durante la duración del turno 
+                Durante la duración del turno
                 el jugador escogerá qué lugar contiene la X y cuál el O
                 en una cuadrícula de 3 filas y 3 columnas
             </p>
             <p>
                 El jugador que gana es aquél que haya obtenido tres
-                lugares de la cuadrícula sucesivos con la X, los lugares 
+                lugares de la cuadrícula sucesivos con la X, los lugares
                 sucesivos pueden estar alineados horizontalmente, verticalmente
                 o en diagonal.
             </p>
