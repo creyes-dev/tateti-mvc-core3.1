@@ -14,4 +14,9 @@
     <WebStackScaffolding_ControllerDialogWidth>600</WebStackScaffolding_ControllerDialogWidth>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Update="Localizacion\Controllers\InvitacionJuegoController.es.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
 </Project>

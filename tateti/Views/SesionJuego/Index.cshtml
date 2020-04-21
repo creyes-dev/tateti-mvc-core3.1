@@ -1,0 +1,29 @@
+﻿@model tateti.Models.SesionJuegoModel
+@section Desktop
+{
+    <h1>Game Session @Model.Id</h1>
+    <h2>Started at @(DateTime.Now.ToShortTimeString())</h2>
+    <div class="alert alert-info">
+        <table class="table">
+            <tr>
+                <td>User 1:</td>
+                <td>
+                    @Model.Jugador1?.Email (<i class="glyphicon glyphicon-unchecked"></i>)
+                </td>
+            </tr>
+            <tr>
+                <td>User 2:</td>
+                <td>
+                    @Model.Jugador2?.Email (<i class=" glyphicon glyphicon-remove-circle"></i>)
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+@section Mobile {
+    <h1>Sesion juego @Model.Id</h1>
+    <h2>Iniciada a la @(DateTime.Now.ToShortTimeString())</h2>
+    Usuario 1: @Model.Jugador1?.Email <i class="glyophicon glyphicon-unchecked"></i><br />
+    Usuario 2: @Model.Jugador2?.Email (<i class="glyphicon glyphicon-remove-circle"></i>) 
+}
+<vc:sesion-juego id-sesion-juego="@Model.Id"></vc:sesion-juego>

@@ -62,7 +62,7 @@ namespace tateti
             // Agregar el servicio que maneja las invitaciones para jugar como un singleton: 
             // tener siempre una sola instancia
             services.AddSingleton<IInvitacionJuegoServicio, InvitacionJuegoServicio>();
-
+            services.AddSingleton<ISesionJuegoServicio, SesionJuegoServicio>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

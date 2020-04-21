@@ -29,7 +29,7 @@ namespace tateti.Controllers
             {
                 InvitadoPor = email
             };
-            HttpContext.Session.SetString("email", email);
+            HttpContext.Session.SetString("Email", email);
             return View(invitacion);
         }
 
