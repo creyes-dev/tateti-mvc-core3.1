@@ -1,4 +1,10 @@
-﻿<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-rowreverse">
+﻿@using Microsoft.AspNetCore.Http;
+@{ 
+    var email = Context.Session.GetString("Email");
+    var nombreCompleto = Context.Session.GetString("NombreCompleto");
+} 
+
+<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-rowreverse">
     <ul class="navbar-nav flex-grow-1">
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -8,6 +14,16 @@
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Ranking" asp-action="Index">Ranking</a>
+        </li>
+        <li>
+            @if(!string.IsNullOrEmpty(email))
+            {
+                Html.RenderPartial("_Cuenta", new tateti.Models.CuentaModel
+                {
+                    Email = email,
+                    NombreCompleto = nombreCompleto
+                });
+            }
         </li>
     </ul>
 </div>

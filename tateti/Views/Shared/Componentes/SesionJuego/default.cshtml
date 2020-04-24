@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http
 @model tateti.Models.SesionJuegoModel
 @{
-    var email = Context.Session.GetString("email");
+    var email = Context.Session.GetString("Email");
 }
 @if (Model.JugadorActivo?.Email == email)
 {

@@ -27,9 +27,14 @@ namespace tateti.Controllers
         {
             var invitacion = new InvitacionJuegoModel
             {
-                InvitadoPor = email
+                InvitadoPor = email,
+                Id = Guid.NewGuid()
             };
-            HttpContext.Session.SetString("Email", email);
+
+            Request.HttpContext.Session.SetString("Email", email);
+            var usuario = await _servicio.ObtenerUsuarioPorEmail(email);
+            Request.HttpContext.Session.SetString("NombreCompleto", $"{ usuario.Nombre} { usuario.Apellido}");
+            
             return View(invitacion);
         }
 
