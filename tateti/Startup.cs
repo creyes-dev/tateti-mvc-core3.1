@@ -17,6 +17,7 @@ using tateti.Services;
 using tateti.Extensiones;
 using tateti.Opciones;
 using tateti.Filtros;
+using tateti.ViewEngines;
 
 namespace tateti
 {
@@ -37,6 +38,12 @@ namespace tateti
             // (*DirBro) services.AddDirectoryBrowser();     // Servicio de asp que permite a los usuarios ver carpetas y archivos
             services.AddControllersWithViews(o => o.Filters.Add(typeof(DetectorMovilFiltro)));
             services.AddSingleton<IUsuarioServicio, UsuarioServicio>();
+
+            /* No me funcionó
+            services.AddTransient<IEmailRenderPlantillaServicio, EmailRenderPlantillaServicio>();
+            services.AddTransient<IEmailViewEngine, EmailViewEngine>();
+            */
+
             services.AddRouting();  // Servicio que se usa para trabajar con enrutamientos
             services.AddSession(obj => { // uso de variables de sesión
                 obj.IdleTimeout = TimeSpan.FromMinutes(30);

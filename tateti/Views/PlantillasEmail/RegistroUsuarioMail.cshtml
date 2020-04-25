@@ -1,0 +1,8 @@
+﻿@model tateti.Models.UsuarioRegistroEmailModelo;
+@{
+    ViewData["Titulo"] = "View";
+    Layout = "_LayoutEmail";
+}
+<h1>Bienvenido @Model.Nombre</h1>
+Gracias por registrarte en nuestro sitio. Por favor haz click <a href="@Model.AccionUrl">aquí</a> para confirmar tu email.
+

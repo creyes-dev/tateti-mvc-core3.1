@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tateti", "tateti\tateti.csproj", "{E7056EFE-123D-4A21-B59E-ED869A186B09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tateti.Logging", "tateti.Logging\tateti.Logging.csproj", "{948C2ABA-2EE3-4031-8708-41453081C1A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tateti.Logging", "tateti.Logging\tateti.Logging.csproj", "{948C2ABA-2EE3-4031-8708-41453081C1A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

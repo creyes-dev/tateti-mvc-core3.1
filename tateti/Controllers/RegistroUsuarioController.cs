@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using tateti.Services;
 using tateti.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace tateti.Controllers
 {
@@ -48,36 +49,38 @@ namespace tateti.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmacionCorreo(string email)
         {
+            // El mail no ha sido confirmado
+            _logger.LogInformation($"##Start##  Proceso de confirmación de correo para {email} ");
             var usuario = await _servicio.ObtenerUsuarioPorEmail(email);
 
-            if (usuario?.MailEstaConfirmado == true)
+            var urlAccion = new UrlActionContext
             {
-                return RedirectToAction("Index", "InvitacionJuego", new { email = email });
+                Action = "ConfirmacionCorreo",
+                Controller = "RegistroUsuario",
+                Values = new { email },
+                Protocol = Request.Scheme,
+                Host = Request.Host.ToString()
+            };
+
+            var emailRegistroUsuario = new UsuarioRegistroEmailModelo
+            {
+                Nombre = $"{usuario.Nombre} {usuario.Apellido}",
+                Email = email,
+                AccionUrl = Url.Action(urlAccion)
+            };
+
+            var emailRenderServicio = HttpContext.RequestServices.GetService<IEmailRenderPlantillaServicio>();
+            // TODO: Renderear la vista
+            // var mensaje = await emailRenderServicio.RenderearTemplate("PlantillasEmail/RegistroUsuarioMail", emailRegistroUsuario, Request.Host.ToString());
+            var mensaje = "Mensaje que va dentro del mail"; 
+
+            try
+            {
+                _emailServicio.EnviarEmail(email, "Confirmación de correo de Ta Te Ti", mensaje).Wait();
             }
-            else
+            catch(Exception e)
             {
-                // El mail no ha sido confirmado
-                _logger.LogInformation($"##Start##  Proceso de confirmación de correo para {email} ");
-
-                var urlAccion = new UrlActionContext
-                {
-                    Action = "ConfirmacionCorreo",
-                    Controller = "RegistroUsuario",
-                    Values = new { email },
-                    Protocol = Request.Scheme,
-                    Host = Request.Host.ToString()
-                };
-
-                var mensaje = $"Gracias por registrarte en nuestro sitio, por favor haz click aquí para confirmar" + $"{ Url.Action(urlAccion) }";
-
-                try
-                {
-                    _emailServicio.EnviarEmail(email, "Confirmación de correo de Ta Te Ti", mensaje).Wait();
-                }
-                catch (Exception e)
-                {
-
-                }
+                
             }
 
             ViewBag.Email = email;
