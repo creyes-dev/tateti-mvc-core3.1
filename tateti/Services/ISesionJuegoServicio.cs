@@ -8,5 +8,6 @@ namespace tateti.Services
     {
         Task<SesionJuegoModel> ObtenerSesionJuego(Guid idSesionJuego);
         Task<SesionJuegoModel> CrearSesionJuego(Guid idInvitacion, string emailInvitadoPor, string invitadoEmail);
+        Task<SesionJuegoModel> AgregarTurno(Guid id, string email, int x, int y);
     }
 }

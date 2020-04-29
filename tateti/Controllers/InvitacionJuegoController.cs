@@ -37,33 +37,49 @@ namespace tateti.Controllers
             
             return View(invitacion);
         }
-
-        //[HttpPost]
-        //public IActionResult Index(InvitacionJuegoModel invitacion)
-        //{
-        //    return Content(_localizador["MensajeConfirmacionInvitacionJuego", invitacion.EmailDestino]);
-        //}
-
-            
+                    
         [HttpPost]
-        public IActionResult Index(InvitacionJuegoModel invitacion, [FromServices] IEmailServicio emailServicio)
+        public async Task<IActionResult> Index(InvitacionJuegoModel invitacion, [FromServices] IEmailServicio emailServicio)
         {
             // Obtener el servicio que maneja la invitacion de juegos que es un singleton
             var invitacionServicio = Request.HttpContext.RequestServices.GetService<IInvitacionJuegoServicio>();
-            
+
             if (ModelState.IsValid)
             {
-                emailServicio.EnviarEmail(invitacion.EmailDestino,
-                    _localizador["Invitación para jugar al Ta te ti"],
-                    _localizador[$"Hola, has sido invitado para jugar al ta te ti por {0}. para unirse al juego, por favor haga click aquí {1}", invitacion.InvitadoPor,
-                        Url.Action("ConfirmacionInvitacionJuego", "InvitacionJuego",
-                        new { invitacion.InvitadoPor,
-                            invitacion.EmailDestino }, Request.Scheme, Request.Host.ToString())]);
+                try
+                {
+                    var invitacionModel = new InvitacionEmailModel
+                    {
+                        Nombre = $"{invitacion.EmailDestino}",
+                        InvitadoPor = await _servicio.ObtenerUsuarioPorEmail(invitacion.InvitadoPor),
+                        ConfirmacionUrl = Url.Action("ConfirmacionInvitacionJuego", "InvitacionJuego", new { id = invitacion.Id }, Request.Scheme, Request.Host.ToString()),
+                        FechaInvitacion = invitacion.FechaConfirmacion
+                    };
+
+                    var servicioRenderEmail = HttpContext.RequestServices.GetService<IEmailRenderPlantillaServicio>();
+                    var mensaje = await servicioRenderEmail.RenderearTemplate<InvitacionEmailModel>("PlantillasEmail/InvitacionEmail",
+                        invitacionModel, Request.Host.ToString());
+
+                    await emailServicio.EnviarEmail(invitacion.EmailDestino, _localizador["Invitación para jugar al Ta te ti"], mensaje);
+                }
+                catch
+                {
+                }
 
                 var invitacionAgregada = invitacionServicio.AgregarInvitacion(invitacion).Result;
-                return RedirectToAction("ConfirmacionInvitacionJuego", new { id = invitacionAgregada.Id });
+                return RedirectToAction("ConfirmacionInvitacionJuego", new { id = invitacion.Id });
             }
             return View(invitacion);
+        }
+
+        [HttpGet]
+        public IActionResult ConfirmarInvitacionJuego(Guid id, [FromServices] IInvitacionJuegoServicio invitacionJuegoServicio)
+        {
+            var gameInvitation = invitacionJuegoServicio.ObtenerInvitacion(id).Result;
+            gameInvitation.EstaConfirmado = true;
+            gameInvitation.FechaConfirmacion = DateTime.Now;
+            invitacionJuegoServicio.ActualizarInvitacion(gameInvitation);
+            return RedirectToAction("Index", "SesionJuego", new { id = id });
         }
 
         [HttpGet]

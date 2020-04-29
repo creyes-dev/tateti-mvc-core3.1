@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using tateti.Extensiones;
 using tateti.Models;
 
 namespace tateti.Services
@@ -39,6 +40,32 @@ namespace tateti.Services
 
             _sesiones.Add(sesion);
             return sesion;
+        }
+
+        public async Task<SesionJuegoModel> AgregarTurno(Guid id, string email, int x, int y)
+        {
+            var sesionJuego = _sesiones.FirstOrDefault(session => session.Id == id);
+            List<TurnoModel> turnos;
+
+            if (!sesionJuego.Turnos.EstaNulaOVacia())
+                turnos = new List<TurnoModel>(sesionJuego.Turnos);
+            else
+                turnos = new List<TurnoModel>();
+
+            // Agregar un nuevo turno
+            turnos.Add(new TurnoModel { Usuario = await _usuarioServicio.ObtenerUsuarioPorEmail(email), X = x, Y = y });
+
+            // Si el actual turno es del jugador 1, el siguiente turno cambiará al jugador 2
+            if (sesionJuego.Jugador1?.Email == email) sesionJuego.JugadorActivo = sesionJuego.Jugador2;
+            else sesionJuego.JugadorActivo = sesionJuego.Jugador1;
+
+            sesionJuego.TurnoFinalizado = true;
+            _sesiones = new ConcurrentBag<SesionJuegoModel>(_sesiones.Where(u => u.Id != id))
+            {
+                sesionJuego
+            };
+
+            return sesionJuego;
         }
 
         /*

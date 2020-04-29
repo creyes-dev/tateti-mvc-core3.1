@@ -1,0 +1,9 @@
+﻿@model tateti.Models.InvitacionEmailModel
+@{
+    ViewData["Titulo"] = "View";
+    Layout = "_LayoutEmail";
+}
+<h1>Bienvenido @Model.Nombre</h1>
+Has sido invitado por @($"{Model.InvitadoPor.Nombre} {Model.InvitadoPor.Apellido}") 
+para jugar una partida de ta te ti. 
+Por favor haz click <a href="@Model.ConfirmacionUrl">Aquí</a> para unirte al juego.

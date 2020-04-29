@@ -32,5 +32,12 @@ namespace tateti.Controllers
 
             return View(sesion);
         }
+
+        public async Task<IActionResult> SetPosicion(Guid id, string email, int x, int y)
+        {
+            var sesionJuego = await _sesionJuegoServicio.ObtenerSesionJuego(id);
+            await _sesionJuegoServicio.AgregarTurno(sesionJuego.Id, email, x, y);
+            return View("Index", sesionJuego);
+        }
     }
 }
